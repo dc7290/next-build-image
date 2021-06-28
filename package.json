@@ -6,10 +6,19 @@
   "author": "dc7290",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
-    "test": "ts-jest"
+    "build": "rm -rf lib && run-p build:*",
+    "build:components": "babel src --out-dir lib --extensions \".ts,.tsx\"",
+    "build:plugin": "tsc ./src/plugin/index.ts ./src/plugin/plugin.ts --outDir lib/plugin --declaration",
+    "build:types": "tsc --emitDeclarationOnly",
+    "test": "ts-jest",
+    "test:watch": "ts-jest --watch"
   },
   "devDependencies": {
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
+    "@babel/preset-react": "^7.10.1",
+    "@babel/preset-typescript": "^7.10.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/react-hooks": "^7.0.0",
@@ -24,6 +33,7 @@
     "eslint-config-prettier": "^8.3.0",
     "jest": "^27.0.5",
     "next": "^11.0.1",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.3.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -33,6 +43,12 @@
     "webpack": "^5.40.0"
   },
   "dependencies": {
+    "responsive-loader": "^3.0.0-2",
     "sharp": "^0.28.3"
+  },
+  "peerDependencies": {
+    "next": "^10.0.0 || ^11.0.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
   }
 }
