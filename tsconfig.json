@@ -20,6 +20,5 @@
       "~/*": ["./*"]
     }
   },
-  "exclude": ["node_modules", "lib", "__tests__", "**/*.test.ts"],
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"]
+  "exclude": ["node_modules", "lib", "__tests__", "**/*.test.ts"]
 }
