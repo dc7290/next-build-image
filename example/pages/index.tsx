@@ -1,10 +1,11 @@
 import { NextPage } from 'next'
-import { Image } from '../../lib'
+
+import Image from './image.png'
 
 const IndexPage: NextPage = () => {
   return (
     <div>
-      <Image src="./image.png" />
+      <img src={Image.src} alt="" />
     </div>
   )
 }

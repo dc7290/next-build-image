@@ -6,7 +6,7 @@
   "author": "dc7290",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf lib && tsc",
+    "build": "rm -rf lib && tsc --project tsconfig.json && cp src/image.d.ts lib",
     "test": "ts-jest",
     "test:watch": "ts-jest --watch"
   },

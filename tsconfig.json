@@ -20,5 +20,6 @@
       "~/*": ["./*"]
     }
   },
-  "exclude": ["node_modules", "lib", "__tests__", "**/*.test.ts"]
+  "exclude": ["node_modules", "lib", "__tests__", "**/*.test.ts"],
+  "include": ["src/**/*.ts"]
 }

@@ -1,5 +1,4 @@
 import { NextConfig } from 'next/dist/next-server/server/config-shared'
-import { resolve } from 'path'
 import { Configuration } from 'webpack'
 
 export type ImageConfig = {
@@ -31,7 +30,7 @@ function withSquooshImage(nextConfig: NextConfig): NextConfig {
         test: /\.(jpe?g|png|)$/,
         use: [
           {
-            loader: resolve(__dirname, 'loader'),
+            loader: require.resolve('./loader/index'),
             // options: {},
           },
         ],
@@ -46,4 +45,4 @@ function withSquooshImage(nextConfig: NextConfig): NextConfig {
   })
 }
 
-export default withSquooshImage
+module.exports = withSquooshImage

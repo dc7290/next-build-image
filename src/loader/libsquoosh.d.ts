@@ -97,12 +97,12 @@ declare module '@squoosh/lib' {
     }>
     encode(encodeOptions: EncodeOptions): Promise<void>
     encodedWith: {
-      [key: string]: Promise<object>
+      [key: string]: Promise<any>
     }
   }
   class ImagePool {
     constructor(threads?: number)
-    ingestImage(image: string | Buffer | URL | object): Image
+    ingestImage(image: string | URL): Image
     close(): Promise<void>
   }
 }
