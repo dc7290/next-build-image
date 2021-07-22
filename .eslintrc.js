@@ -8,7 +8,6 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'next',
-    'next/core-web-vitals',
     'plugin:prettier/recommended',
   ],
   parser: '@typescript-eslint/parser',
