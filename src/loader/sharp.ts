@@ -15,18 +15,30 @@ export function resizeAndCreateFallbackImage({
 }: ResizeProps & { mime: Mime }) {
   switch (mime) {
     case 'image/jpeg':
-      return data.resize({ width }).jpeg().toBuffer({ resolveWithObject: true })
+      return data
+        .clone()
+        .resize({ width })
+        .jpeg()
+        .toBuffer({ resolveWithObject: true })
     case 'image/png':
-      return data.resize({ width }).png().toBuffer({ resolveWithObject: true })
+      return data
+        .clone()
+        .resize({ width })
+        .png()
+        .toBuffer({ resolveWithObject: true })
   }
 }
 
 export function resizeAndConvertToWebp({ data, width }: ResizeProps) {
-  return data.resize({ width }).webp().toBuffer({ resolveWithObject: true })
+  return data
+    .clone()
+    .resize({ width })
+    .webp()
+    .toBuffer({ resolveWithObject: true })
 }
 
 export async function createProcessedBuffers(
-  content: Buffer,
+  content: Buffer | string,
   mime: Mime,
   options: DefaultMargedLoaderOptions
 ) {
@@ -43,5 +55,8 @@ export async function createProcessedBuffers(
     )
   })
 
-  return await Promise.all(promises)
+  return {
+    buffers: await Promise.all(promises),
+    metaData: await sharpStream.metadata(),
+  }
 }

@@ -2,11 +2,7 @@ import { interpolateName, parseQuery } from 'loader-utils'
 import { LoaderContext } from 'webpack'
 import { extname } from 'path'
 
-import {
-  createProcessedBuffers,
-  resizeAndConvertToWebp,
-  resizeAndCreateFallbackImage,
-} from './sharp'
+import { createProcessedBuffers } from './sharp'
 
 type LoaderOptions = {
   name?: string
@@ -32,10 +28,7 @@ const mimeMap: {
   '.jpeg': 'image/jpeg',
 }
 
-async function squooshLoader(
-  this: LoaderContext<LoaderOptions>,
-  content: Buffer
-) {
+async function loader(this: LoaderContext<LoaderOptions>, content: Buffer) {
   const loaderCallback = this.async()
   const loaderOptions = Object.assign({}, defaultOptions, this.getOptions())
 
@@ -82,43 +75,69 @@ async function squooshLoader(
     this.emitFile(loaderOptions.outputPath + filename, content)
   }
 
-  const fallbackSources = []
-  const webpSources = []
+  const fallbackSources: { filename: string; size: number }[] = []
+  const webpSources: { filename: string; size: number }[] = []
 
-  const processedBuffers = await createProcessedBuffers(
-    content,
+  const { buffers, metaData } = await createProcessedBuffers(
+    resourcePath,
     mime,
     loaderOptions
   )
-  processedBuffers.forEach(({ data, info }) => {
+  buffers.forEach(({ data, info }) => {
+    const fallbackOutputFilename = replaceExtensionPlaceholder(
+      fallbackFileName,
+      info.width,
+      info.height
+    )
+    const webpOutputFilename = replaceExtensionPlaceholder(
+      webpFileName,
+      info.width,
+      info.height
+    )
+
     switch (info.format) {
       case 'jpeg':
-        createFile(
-          data,
-          replaceExtensionPlaceholder(fallbackFileName, info.width, info.height)
-        )
+        createFile(data, fallbackOutputFilename)
+        fallbackSources.push({
+          filename: fallbackOutputFilename,
+          size: info.width,
+        })
         break
       case 'png':
-        createFile(
-          data,
-          replaceExtensionPlaceholder(fallbackFileName, info.width, info.height)
-        )
+        createFile(data, fallbackOutputFilename)
+        fallbackSources.push({
+          filename: fallbackOutputFilename,
+          size: info.width,
+        })
         break
       case 'webp':
-        createFile(
-          data,
-          replaceExtensionPlaceholder(webpFileName, info.width, info.height)
-        )
+        createFile(data, webpOutputFilename)
+        webpSources.push({
+          filename: webpOutputFilename,
+          size: info.width,
+        })
         break
     }
   })
 
+  const createSrcSet = (sources: { filename: string; size: number }[]) =>
+    sources
+      .map(
+        ({ filename, size }) =>
+          `${loaderOptions.publicPath + filename} ${size}w`
+      )
+      .join(',')
+
   loaderCallback(
     null,
     `module.exports = {
-      src: '${loaderOptions.publicPath + fileName}'
+      src: '${loaderOptions.publicPath}',
+      fallbackSrcSet: '${createSrcSet(fallbackSources)}',
+      webpSrcSet: '${createSrcSet(webpSources)}',
+      width: ${metaData.width},
+      height: ${metaData.height},
     }`
   )
 }
 
-module.exports = squooshLoader
+module.exports = loader

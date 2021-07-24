@@ -6,7 +6,7 @@ import {
   createProcessedBuffers,
   resizeAndConvertToWebp,
   resizeAndCreateFallbackImage,
-} from '../../src/plugin/loader/sharp'
+} from '../../src/loader/sharp'
 
 const jpegImgage = readFileSync(resolve(__dirname, './image.jpeg'))
 const pngImage = readFileSync(resolve(__dirname, './image.png'))
@@ -69,13 +69,13 @@ test('複数の画像が適切に処理されるか: jpeg', async () => {
     deviceSizes: [640, 750, 828],
   }
 
-  const processedBuffers = await createProcessedBuffers(
+  const { buffers } = await createProcessedBuffers(
     jpegImgage,
     'image/jpeg',
     options
   )
 
-  processedBuffers.forEach(({ info }) => {
+  buffers.forEach(({ info }) => {
     expect(options.deviceSizes.includes(info.width)).toBeTruthy()
     expect(info).toMatchObject({
       format: expect.stringMatching(/webp|jpeg/),
@@ -91,13 +91,13 @@ test('複数の画像が適切に処理されるか: png', async () => {
     deviceSizes: [640, 750, 828],
   }
 
-  const processedBuffers = await createProcessedBuffers(
+  const { buffers, metaData } = await createProcessedBuffers(
     pngImage,
     'image/png',
     options
   )
 
-  processedBuffers.forEach(({ info }) => {
+  buffers.forEach(({ info }) => {
     expect(options.deviceSizes.includes(info.width)).toBeTruthy()
     expect(info).toMatchObject({
       format: expect.stringMatching(/webp|png/),

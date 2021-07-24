@@ -1,8 +1,8 @@
-const withSquooshImages = require('../lib')
+const withBuildImages = require('../lib')
 
 const config = {
   reactStrictMode: true,
 }
 
-module.exports = withSquooshImages(config)
+module.exports = withBuildImages(config)
 // module.exports = config
