@@ -6,10 +6,10 @@ import {
   createProcessedBuffers,
   resizeAndConvertToWebp,
   resizeAndCreateFallbackImage,
-} from '../../src/loader/sharp'
+} from '../../src/plugin/loader/sharp'
 
-const jpegImgage = readFileSync(resolve(__dirname, './image.jpeg'))
-const pngImage = readFileSync(resolve(__dirname, './image.png'))
+const jpegImgage = resolve(__dirname, './image.jpeg')
+const pngImage = resolve(__dirname, './image.png')
 
 test('フォールバック画像が適切にリサイズされるか: jpeg', async () => {
   const width = 500

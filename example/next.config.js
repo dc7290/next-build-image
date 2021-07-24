@@ -1,8 +1,8 @@
-const withBuildImages = require('../lib')
+const { withBuildImage } = require('../lib')
 
 const config = {
   reactStrictMode: true,
 }
 
-module.exports = withBuildImages(config)
+module.exports = withBuildImage(config)
 // module.exports = config
