@@ -1,10 +1,23 @@
-import { types as t, NodePath, PluginObj } from '@babel/core'
+import { PluginObj } from '@babel/core'
+import * as t from '@babel/types'
 import pluginSyntaxJsx from '@babel/plugin-syntax-jsx'
+import resolveJsxComponent from './utils/resolveJsxComponents'
+import transformImageComponent from './transform/Image'
 
-function transform(_api: typeof t): PluginObj {
+export type Types = typeof t
+
+function transform(_api: Types): PluginObj {
   return {
     inherits: pluginSyntaxJsx,
-    visitor: {},
+    visitor: {
+      JSXElement: (path) => {
+        const component = resolveJsxComponent(_api, path)
+
+        if (component === 'Image') {
+          transformImageComponent(_api, path)
+        }
+      },
+    },
   }
 }
 

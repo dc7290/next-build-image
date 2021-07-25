@@ -32,6 +32,6 @@ module.exports = {
   plugins: [],
   rules: {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    'next/next/no-img-element': 0,
+    '@next/next/no-img-element': 0,
   },
 }
