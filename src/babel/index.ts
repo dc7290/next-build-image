@@ -6,15 +6,15 @@ import transformImageComponent from './transform/Image'
 
 export type Types = typeof t
 
-function transform(_api: Types): PluginObj {
+function transform({ types }: { types: Types }): PluginObj {
   return {
     inherits: pluginSyntaxJsx,
     visitor: {
       JSXElement: (path) => {
-        const component = resolveJsxComponent(_api, path)
+        const component = resolveJsxComponent(types, path)
 
         if (component === 'Image') {
-          transformImageComponent(_api, path)
+          transformImageComponent(types, path)
         }
       },
     },
